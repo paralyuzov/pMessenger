@@ -1,0 +1,69 @@
+ <app-nav />
+
+<!-- Mobile/Tablet Navigation Tabs -->
+<div class="lg:hidden border-b border-neutral-700 bg-neutral-900 sticky top-0 z-40">
+  <div class="max-w-7xl mx-auto flex">
+    <button
+      (click)="setMobileView('chats')"
+      class="flex-1 px-4 py-3 text-sm font-medium transition-all relative"
+      [class.text-blue-500]="mobileView() === 'chats'"
+      [class.text-neutral-400]="mobileView() !== 'chats'">
+      <div class="flex items-center justify-center gap-2">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
+        </svg>
+        <span>Chats</span>
+      </div>
+      @if(mobileView() === 'chats') {
+        <div class="absolute bottom-0 left-0 right-0 h-0.5 bg-blue-500"></div>
+      }
+    </button>
+
+    <button
+      (click)="setMobileView('friends')"
+      class="flex-1 px-4 py-3 text-sm font-medium transition-all relative"
+      [class.text-blue-500]="mobileView() === 'friends'"
+      [class.text-neutral-400]="mobileView() !== 'friends'">
+      <div class="flex items-center justify-center gap-2">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
+        </svg>
+        <span>Friends</span>
+      </div>
+      @if(mobileView() === 'friends') {
+        <div class="absolute bottom-0 left-0 right-0 h-0.5 bg-blue-500"></div>
+      }
+    </button>
+  </div>
+</div>
+
+<div class="max-w-7xl mx-auto">
+  <div class="grid gap-4 p-1 lg:grid-cols-12 min-h-[calc(100vh-126px)] lg:min-h-[calc(100vh-73px)]">
+    <!-- Chats Section -->
+    <div
+      class="lg:col-span-3"
+      [class.hidden]="mobileView() !== 'chats'"
+      [class.block]="mobileView() === 'chats'"
+      [class.lg:block]="true">
+      <app-chats-section />
+    </div>
+
+    <!-- Chat Messages Section -->
+    <div
+      class="border border-neutral-800 rounded-lg lg:col-span-6"
+      [class.hidden]="mobileView() !== 'messages'"
+      [class.block]="mobileView() === 'messages'"
+      [class.lg:block]="true">
+      <app-chat-messages />
+    </div>
+
+    <!-- Friends Section -->
+    <div
+      class="lg:col-span-3"
+      [class.hidden]="mobileView() !== 'friends'"
+      [class.block]="mobileView() === 'friends'"
+      [class.lg:block]="true">
+      <app-friends-section />
+    </div>
+  </div>
+</div>
