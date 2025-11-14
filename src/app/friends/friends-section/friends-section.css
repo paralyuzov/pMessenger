@@ -1,0 +1,17 @@
+/* Custom scrollbar styles */
+:host ::ng-deep .scrollbar-thin::-webkit-scrollbar {
+  width: 6px;
+}
+
+:host ::ng-deep .scrollbar-thin::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+:host ::ng-deep .scrollbar-thin::-webkit-scrollbar-thumb {
+  background: rgb(64 64 64);
+  border-radius: 3px;
+}
+
+:host ::ng-deep .scrollbar-thin::-webkit-scrollbar-thumb:hover {
+  background: rgb(82 82 82);
+}
