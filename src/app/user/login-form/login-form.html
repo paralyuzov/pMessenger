@@ -1,0 +1,102 @@
+<div class="w-full max-w-md">
+  <!-- Logo/Header -->
+  <div class="text-center mb-8">
+    <div class="text-white text-4xl flex justify-center font-bold mb-2">
+      <span class="font-bold text-transparent bg-radial from-yellow-500 to-yellow-900 bg-clip-text">p</span>
+      <span class="font-bold text-transparent bg-gray-300 bg-clip-text">Messenger</span>
+    </div>
+    <p class="text-gray-400 text-sm">Welcome back! Please sign in to continue</p>
+  </div>
+
+  <!-- Login Form -->
+  <form
+    [formGroup]="loginForm"
+    (ngSubmit)="onSubmit()"
+    class="bg-neutral-800 border border-neutral-700 rounded-2xl shadow-2xl p-8 space-y-6"
+  >
+    <!-- Email Field -->
+    <div class="space-y-2">
+      <label for="email" class="block text-sm font-medium text-yellow-500">
+        Email Address
+      </label>
+      <input
+        type="email"
+        id="email"
+        formControlName="email"
+        class="w-full bg-neutral-700 text-white placeholder-gray-400 border border-neutral-600 rounded-lg px-4 py-3 focus:ring-2 focus:ring-yellow-500 focus:border-transparent outline-none transition-all"
+        placeholder="you@example.com"
+      />
+      @if(isControlInvalid('email')) {
+        <p class="text-red-400 text-xs mt-1">{{ getErrorMessage('email') }}</p>
+      }
+    </div>
+
+    <!-- Password Field -->
+    <div class="space-y-2">
+      <label for="password" class="block text-sm font-medium text-yellow-500">
+        Password
+      </label>
+      <input
+        type="password"
+        id="password"
+        formControlName="password"
+        class="w-full bg-neutral-700 text-white placeholder-gray-400 border border-neutral-600 rounded-lg px-4 py-3 focus:ring-2 focus:ring-yellow-500 focus:border-transparent outline-none transition-all"
+        placeholder="••••••••"
+      />
+      @if(isControlInvalid('password')) {
+        <p class="text-red-400 text-xs mt-1">{{ getErrorMessage('password') }}</p>
+      }
+    </div>
+
+    <!-- Remember Me & Forgot Password -->
+    <div class="flex items-center justify-between">
+      <div class="flex items-center">
+        <input
+          id="remember-me"
+          name="remember-me"
+          type="checkbox"
+          class="h-4 w-4 rounded border-neutral-600 bg-neutral-700 text-yellow-500 focus:ring-yellow-500"
+        />
+        <label for="remember-me" class="ml-2 block text-sm text-gray-400">
+          Remember me
+        </label>
+      </div>
+      <a href="#" class="text-sm text-yellow-500 hover:text-yellow-400 transition-colors">
+        Forgot password?
+      </a>
+    </div>
+
+    <!-- Submit Button -->
+    <div class="pt-4">
+      <button
+        type="submit"
+        class="w-full bg-gradient-to-r from-yellow-500 to-yellow-600 text-white font-semibold py-3 rounded-lg hover:from-yellow-600 hover:to-yellow-700 focus:ring-2 focus:ring-yellow-500 focus:ring-offset-2 focus:ring-offset-neutral-800 transition-all shadow-lg"
+        [disabled]="loginForm.invalid"
+      >
+        Sign In
+      </button>
+    </div>
+
+    <!-- Divider -->
+    <div class="relative">
+      <div class="absolute inset-0 flex items-center">
+        <div class="w-full border-t border-neutral-700"></div>
+      </div>
+      <div class="relative flex justify-center text-sm">
+        <span class="px-2 bg-neutral-800 text-gray-400">Don't have an account?</span>
+      </div>
+    </div>
+
+    <!-- Signup Link -->
+    <div class="text-center">
+      <a href="/signup" class="text-yellow-500 hover:text-yellow-400 text-sm font-medium transition-colors">
+        Create an account
+      </a>
+    </div>
+  </form>
+
+  <!-- Footer -->
+  <p class="text-center text-gray-500 text-xs mt-8">
+    By signing in, you agree to our Terms of Service and Privacy Policy
+  </p>
+</div>
