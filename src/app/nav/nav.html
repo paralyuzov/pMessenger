@@ -1,0 +1,41 @@
+<header class="p-4 border-b border-white/10">
+  <div class="max-w-7xl mx-auto flex items-center h-10">
+    <div class="sm:block p-2">
+      <div class="text-white text-xl flex font-bold sm:text-3xl">
+        <span
+          class="font-bold text-transparent bg-radial from-yellow-500 to-yellow-900 bg-clip-text"
+          >p</span
+        >
+        <span class="font-bold text-transparent bg-gray-300 bg-clip-text">Messenger</span>
+      </div>
+    </div>
+    <div>
+      <i
+        (click)="searchFriends()"
+        class="material-icons text-white p-1 bg-neutral-800/50 rounded-full hover:cursor-pointer hover:bg-neutral-800"
+        >search</i
+      >
+      @if(toggleSearchFriends()) {
+      <app-search-friends (closeShowFriends)="handleCloseSearchFriends()" />
+
+      }
+    </div>
+
+    <div class="flex justify-evenly space-x-2 ml-auto">
+      <div class="relative">
+        <i
+          (click)="showNotifications()"
+          class="material-icons relative text-white p-1 rounded-full bg-neutral-800/50 hover:cursor-pointer hover:bg-neutral-800"
+          >notifications</i
+        >
+        @if(toggleNotifications()) {
+          <app-notifications (closeDropdown)="handleCloseNotifications()" />
+        }
+      </div>
+      <i
+        class="material-icons text-white p-1 rounded-full bg-neutral-800/50 hover:cursor-pointer hover:bg-neutral-800"
+        >account_circle</i
+      >
+    </div>
+  </div>
+</header>
