@@ -1,0 +1,40 @@
+<div>
+  <h4 class="text-center font-mono text-xs mt-2 text-yellow-600">Chats</h4>
+  <div class="flex flex-col justify-center items-start space-y-1 text-gray-300 text-sm p-2">
+    @if(loading()) {
+    <p>Loading chats...</p>
+    } @else {
+    @for(room of rooms(); track room.id) {
+    <div (click)="joinRoom(room.id)"
+      class="flex items-center  border border-neutral-800 space-x-2 w-full rounded-lg p-2 hover:bg-neutral-800 hover:cursor-pointer hover:translate-x-0.5 transition-transform duration-300"
+      [class]="activeRoom() === room.id ? 'bg-gradient-to-l from-neutral-800 via-neutral-900 to-neutral-900' : ''">
+      <div class="relative">
+        <img src="{{ room.participants[0].user.avatar }}" alt="{{ room.participants[0].user.name }}'s avatar"
+          class="w-14 h-14 rounded-full object-cover" />
+        <div
+          class="absolute bottom-0 right-0 w-3 h-3 rounded-full border-2 border-neutral-900"
+          [class.bg-green-500]="room.participants[0].user.status.isOnline"
+          [class.bg-gray-500]="!room.participants[0].user.status.isOnline"
+        ></div>
+      </div>
+      <div class="flex flex-col flex-1 min-w-0">
+        <p class="font-medium truncate">{{ room.participants[0].user.name }}</p>
+        @if(room.lastMessage) {
+          <p class="text-gray-500 text-xs truncate">
+            <span class="font-medium">
+              {{room.lastMessage.senderId === user()?.id ? 'You:' : ""}}
+            </span>
+            {{ room.lastMessage.type === 'IMAGE' ? '📷 Photo' : truncateMessage(room.lastMessage.content, 35) }}
+          </p>
+        } @else {
+          <p class="text-gray-500 text-xs italic">No messages yet</p>
+        }
+      </div>
+      @if(unreadedMessages()[room.id] > 0) {
+      <span class="text-amber-600 font-mono text-xs ml-auto border border-amber-600/20 p-1 rounded-md">{{ unreadedMessages()[room.id]}}</span>
+      }
+    </div>
+    }
+    }
+  </div>
+</div>

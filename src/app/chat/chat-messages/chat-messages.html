@@ -1,0 +1,179 @@
+<div class="bg-neutral-900 text-neutral-300 rounded-md">
+  <div class="flex flex-col justify-center items-center w-full">
+    <div class="w-full bg-neutral-800/20">
+      <div class="bg-neutral-900 p-4 border-b border-neutral-700 sticky top-0 z-50">
+        @if(friendInfo()) {
+        <div class="flex items-center gap-3">
+          <button
+            (click)="goBackToChats()"
+            class="lg:hidden p-2 -ml-2 hover:bg-neutral-800 rounded-full transition-colors"
+            aria-label="Back to chats"
+          >
+            <svg
+              class="w-6 h-6 text-neutral-300"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M15 19l-7-7 7-7"
+              />
+            </svg>
+          </button>
+
+          <div class="relative">
+            <img
+              [src]="friendInfo()!.avatar"
+              [alt]="friendInfo()!.name"
+              class="w-10 h-10 rounded-full object-cover"
+            />
+            <div
+              class="absolute bottom-0 right-0 w-3 h-3 rounded-full border-2 border-neutral-800"
+              [class.bg-green-500]="friendInfo()!.status.isOnline"
+              [class.bg-gray-500]="!friendInfo()!.status.isOnline"
+            ></div>
+          </div>
+          <div class="flex flex-col">
+            <h3 class="text-neutral-100 font-semibold">{{ friendInfo()!.name }}</h3>
+            <span class="text-xs text-neutral-400">
+              {{ friendInfo()!.status.isOnline ? 'Online' : 'Offline' }}
+            </span>
+          </div>
+        </div>
+        } @else {
+        <div class="text-neutral-400">Select a chat</div>
+        }
+      </div>
+
+      <div
+        #messagesContainer
+        class="p-4 space-y-4 overflow-y-auto scrollbar-thin scrollbar-thumb-neutral-600 scrollbar-track-neutral-900 scroll-smooth min-h-[calc(100vh-267px)] lg:max-h-[calc(100vh-222px)] rounded-lg"
+      >
+        @if(loading()) {
+        <div class="flex justify-center items-center">
+          <p-progressSpinner />
+        </div>
+        } @else { @for(message of messages() ; track message.id) {
+        <div class="flex flex-col gap-4">
+          <p class="text-center text-neutral-600 text-xs">
+            {{ message.createdAt | date : 'medium' }}
+          </p>
+          @if(message.senderId !== user()?.id) {
+          <div class="flex items-start gap-2 max-w-[70%]">
+            <div class="flex-none self-start">
+              <img
+                src="{{ message.sender?.avatar }}"
+                alt="{{ message.sender?.name }}"
+                class="w-8 h-8 rounded-full object-cover"
+              />
+            </div>
+            <div class="p-2 bg-neutral-900 rounded-lg shadow-md break-words max-w-full">
+              @if(message.type === 'IMAGE') {
+              <img src="{{ message.content }}" alt="GIF Image" class="w-36 rounded-lg" />
+              } @else {
+              <p class="break-words">{{ message.content }}</p>
+              }
+            </div>
+          </div>
+          } @else {
+          <div class="flex flex-row-reverse items-start gap-2 max-w-[70%] ml-auto">
+            <div class="flex-none self-start">
+              <img
+                src="{{ user()?.avatar }}"
+                alt="{{ user()?.name }}"
+                class="w-8 h-8 rounded-full object-cover"
+              />
+            </div>
+            <div class="p-2 bg-neutral-900 rounded-lg shadow-md break-words max-w-full">
+              @if(message.type === 'IMAGE') {
+              <img src="{{ message.content }}" alt="GIF Image" class="w-36 rounded-lg" />
+              } @else {
+              <p class="break-words">
+                {{ message.content }}
+              </p>
+              }
+            </div>
+          </div>
+          }
+        </div>
+        } @empty {
+        <div class="text-center">
+          <p class="text-neutral-500">Start a conversation</p>
+        </div>
+        } } @if(friendTyping()) {
+        <div class="flex items-start gap-2 max-w-[70%]">
+          <div class="p-3 bg-neutral-900 rounded-lg shadow-md">
+            <div class="flex space-x-1">
+              <div
+                class="w-1 h-1 bg-neutral-500 rounded-full animate-bounce"
+                style="animation-delay: 0ms"
+              ></div>
+              <div
+                class="w-1 h-1 bg-neutral-500 rounded-full animate-bounce"
+                style="animation-delay: 150ms"
+              ></div>
+              <div
+                class="w-1 h-1 bg-neutral-500 rounded-full animate-bounce"
+                style="animation-delay: 300ms"
+              ></div>
+            </div>
+          </div>
+        </div>
+        }
+      </div>
+    </div>
+  </div>
+  <div
+    class="relative flex justify-center items-center border-t border-neutral-700 space-x-4 w-full p-4"
+  >
+    <app-button
+      (click)="toggleGif()"
+      text="GIF"
+      size="extra-small"
+      color="secondary"
+      rounded="large"
+    />
+    @if(showGifPicker()) {
+    <app-gif-picker
+      (selectedGif)="handleSelectedGif($event)"
+      (closePicker)="toggleGif()"
+      class="absolute bottom-16 left-0 right-0 sm:right-auto"
+    />
+    }
+
+    <app-button
+      (click)="togglePicker()"
+      text="😊"
+      size="extra-small"
+      color="secondary"
+      rounded="full"
+    />
+    @if(showPicker()) {
+    <div class="absolute bottom-15 left-0">
+      <div class="emoji-picker-wrapper">
+        <emoji-mart
+          (emojiSelect)="addEmoji($event)"
+          set="apple"
+          [showPreview]="false"
+          [enableSearch]="true"
+          [skin]="1"
+          [perLine]="8"
+          class="emoji-picker-custom"
+        ></emoji-mart>
+      </div>
+    </div>
+    }
+    <input
+      #messageInput
+      [(ngModel)]="messageContent"
+      (keydown.enter)="sendMessage()"
+      class="bg-neutral-600 w-full py-1 px-3 rounded-2xl"
+      type="text"
+      placeholder="Enter message..."
+    />
+    <i (click)="sendMessage()" class="material-icons text-blue-500 hover:cursor-pointer">send</i>
+  </div>
+</div>
