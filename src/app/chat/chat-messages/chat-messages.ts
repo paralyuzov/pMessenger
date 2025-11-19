@@ -104,7 +104,7 @@ export class ChatMessages implements AfterViewInit {
           this.chatService.loadOlderMessages();
           element.scrollTop = 400;
         }
-        if (element.scrollHeight - element.scrollTop === element.clientHeight) {
+        if (Math.abs(element.scrollHeight - element.scrollTop - element.clientHeight) < 20) {
           this.preventAutoScroll.set(false);
         }
       });
@@ -113,6 +113,14 @@ export class ChatMessages implements AfterViewInit {
         debounceTime(300), takeUntilDestroyed(this.destroyRef)
       ).subscribe(() => {
        this.chatService.userTyping();
+      });
+
+      fromEvent(this.messageInput.nativeElement, 'focus').pipe(
+        takeUntilDestroyed(this.destroyRef)
+      ).subscribe(() => {
+        setTimeout(() => {
+          this.scrollToBottom();
+        }, 300); 
       });
   }
 
@@ -130,7 +138,10 @@ export class ChatMessages implements AfterViewInit {
     setTimeout(() => {
       const el = this.messagesContainer?.nativeElement;
       if (el) {
-        el.scrollTop = el.scrollHeight;
+        el.scrollTo({
+          top: el.scrollHeight,
+          behavior: 'smooth'
+        });
       }
     }, 200);
   }
@@ -140,6 +151,7 @@ export class ChatMessages implements AfterViewInit {
       return;
     }
     this.chatService.sendMessage(this.messageContent);
+    this.preventAutoScroll.set(false);
     this.messageContent = '';
   }
 
